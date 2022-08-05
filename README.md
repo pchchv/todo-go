@@ -1,2 +1,5 @@
-# todo-go
-Todo list backend 
+# Todo list backend
+# Running the application without Docker
+```
+go run .
+```
