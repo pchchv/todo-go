@@ -8,6 +8,7 @@ import (
 )
 
 var envURL string
+var testURL string
 
 func init() {
 	// Load values from .env into the system
