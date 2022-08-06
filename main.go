@@ -5,10 +5,14 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var envURL string
-var testURL string
+var (
+	envURL     string
+	testURL    string
+	collection *mongo.Collection
+)
 
 func init() {
 	// Load values from .env into the system
@@ -27,5 +31,6 @@ func getEnvValue(v string) string {
 
 func main() {
 	envURL = getEnvValue("HOST") + ":" + getEnvValue("PORT")
+	db()
 	server()
 }
