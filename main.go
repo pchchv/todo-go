@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -27,6 +28,16 @@ func getEnvValue(v string) string {
 		log.Panicf("Value %v does not exist", v)
 	}
 	return value
+}
+func creator(todo Todo) MongoTodo {
+	t := MongoTodo{}
+	t.Todo = todo
+	_, err := bson.Marshal(t)
+	if err != nil {
+		log.Panic(err)
+	}
+	// TODO: Implement addition of a task to the database
+	return t
 }
 
 func main() {
