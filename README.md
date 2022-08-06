@@ -11,10 +11,11 @@ go run .
         "GET" :8000/ping
 ```
 ```
-"POST" /todo — Create a poll with answer options
+"POST" /todo — Create a todo
     options:
-        title — Name of poll
-        options — Answer options
+        title — Name of todo
+        text — Extra text
+        completed — Is the task completed (true or false)
 
     example: 
         "POST" :8000/todo?title=Buy coffee
