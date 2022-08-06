@@ -27,7 +27,7 @@ func createTodoHandler(c echo.Context) error {
 
 func routes(e *echo.Echo) {
 	e.GET("/ping", pingHandler)
-	e.GET("/todo", createTodoHandler)
+	e.POST("/todo", createTodoHandler)
 }
 
 func server() {
