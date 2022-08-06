@@ -8,13 +8,26 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func ping(c echo.Context) error {
+func pingHandler(c echo.Context) error {
 	msg := "Todo backend Service. Version 0.0.0"
 	return c.String(http.StatusOK, msg)
 }
 
+func createTodoHandler(c echo.Context) error {
+	todo := Todo{}
+	todo.Title = c.QueryParam("title")
+	todo.Text = c.QueryParam("text")
+	if c.QueryParam("completed") == "true" {
+		todo.Completed = true
+	} else {
+		todo.Completed = false
+	}
+	return c.JSONPretty(http.StatusOK, creator(todo), "\t")
+}
+
 func routes(e *echo.Echo) {
-	e.GET("/ping", ping)
+	e.GET("/ping", pingHandler)
+	e.GET("/todo", createTodoHandler)
 }
 
 func server() {
