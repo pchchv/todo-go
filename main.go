@@ -63,6 +63,16 @@ func patcher(id string, title string, text string, completed string) Todo {
 	return t
 }
 
+func deleter(id string, title string) Todo {
+	todo := Todo{}
+	if id != "" {
+		// TODO: Implement task deleting by id
+	} else if title != "" {
+		// TODO: Implement task deleting by title
+	}
+	return todo
+}
+
 func main() {
 	envURL = getEnvValue("HOST") + ":" + getEnvValue("PORT")
 	server()
