@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"log"
 	"os"
 
@@ -50,14 +52,26 @@ func creator(title string, text string, completed string) MongoTodo {
 	return t
 }
 
-func getter(id string, title string) MongoTodo {
-	t := MongoTodo{}
-	// TODO: Implement retrieving a task from a database
-	return t
+func getter(id string, title string) (MongoTodo, error) {
+	var res *mongo.SingleResult
+	result := &MongoTodo{}
+	if id != "" {
+		res = collection.FindOne(context.TODO(), bson.M{"_id": id})
+	} else {
+		res = collection.FindOne(context.TODO(), bson.M{"title": title})
+	}
+	err := res.Decode(result)
+	if err != nil {
+		return *result, errors.New("Todo not found")
+	}
+	return *result, nil
 }
 
 func patcher(id string, title string, text string, completed string) MongoTodo {
-	t := getter(id, title)
+	t, err := getter(id, title)
+	if err != nil {
+		log.Panic(err)
+	}
 	// TODO: Implement a task updating
 	return t
 }

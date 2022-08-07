@@ -24,7 +24,10 @@ func createTodoHandler(c echo.Context) error {
 func getTodoHandler(c echo.Context) error {
 	id := c.QueryParam("id")
 	title := c.QueryParam("title")
-	todo := getter(id, title)
+	todo, err := getter(id, title)
+	if err != nil {
+		return c.String(http.StatusOK, "Todo not found")
+	}
 	return c.JSONPretty(http.StatusOK, todo, "\t")
 }
 
