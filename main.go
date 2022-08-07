@@ -1,20 +1,22 @@
 package main
 
 import (
-	"context"
-	"errors"
 	"log"
 	"os"
 
 	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
+type Todo struct {
+	Id        int    `json:"id"`
+	Title     string `json:"title"`
+	Text      string `json:"textx"`
+	Completed bool   `json:"completed"`
+}
+
 var (
-	envURL     string
-	testURL    string
-	collection *mongo.Collection
+	envURL  string
+	testURL string
 )
 
 func init() {
@@ -33,51 +35,35 @@ func getEnvValue(v string) string {
 	return value
 }
 
-func creator(title string, text string, completed string) MongoTodo {
+func creator(title string, text string, completed string) Todo {
 	todo := Todo{}
-	t := MongoTodo{}
 	todo.Title = title
 	todo.Text = text
+	// TODO: Implement id generation and assignment
 	if completed == "true" {
 		todo.Completed = true
 	} else {
 		todo.Completed = false
 	}
-	t.Todo = todo
-	_, err := bson.Marshal(t)
-	if err != nil {
-		log.Panic(err)
-	}
-	// TODO: Implement addition of a task to the database
-	return t
+	// TODO: Implement addition of a task repository
+	return todo
 }
 
-func getter(id string, title string) (MongoTodo, error) {
-	var res *mongo.SingleResult
-	result := &MongoTodo{}
+func getter(id string, title string) Todo {
+	todo := Todo{}
 	if id != "" {
-		res = collection.FindOne(context.TODO(), bson.M{"_id": id})
 	} else {
-		res = collection.FindOne(context.TODO(), bson.M{"title": title})
 	}
-	err := res.Decode(result)
-	if err != nil {
-		return *result, errors.New("Todo not found")
-	}
-	return *result, nil
+	return todo
 }
 
-func patcher(id string, title string, text string, completed string) MongoTodo {
-	t, err := getter(id, title)
-	if err != nil {
-		log.Panic(err)
-	}
+func patcher(id string, title string, text string, completed string) Todo {
+	t := getter(id, title)
 	// TODO: Implement a task updating
 	return t
 }
 
 func main() {
 	envURL = getEnvValue("HOST") + ":" + getEnvValue("PORT")
-	db()
 	server()
 }
