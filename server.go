@@ -21,10 +21,20 @@ func createTodoHandler(c echo.Context) error {
 	return c.JSONPretty(http.StatusOK, todo, "\t")
 }
 
+func patchTodoHandler(c echo.Context) error {
+	id := c.QueryParam("id")
+	title := c.QueryParam("title")
+	text := c.QueryParam("text")
+	completed := c.QueryParam("completed")
+	todo := patcher(id, title, text, completed)
+	return c.JSONPretty(http.StatusOK, todo, "\t")
+}
+
 func routes(e *echo.Echo) {
 	e.GET("/", pingHandler)
 	e.GET("/ping", pingHandler)
 	e.POST("/todo", createTodoHandler)
+	e.PATCH("/todo", patchTodoHandler)
 }
 
 func server() {
