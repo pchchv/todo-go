@@ -40,8 +40,13 @@ func patchTodoHandler(c echo.Context) error {
 func deleteTodoHandler(c echo.Context) error {
 	id := c.QueryParam("id")
 	title := c.QueryParam("title")
-	todo := deleter(id, title)
+	todo, _ := deleter(id, title)
 	return c.JSONPretty(http.StatusOK, todo, "\t")
+}
+
+func deleteAllTodosHandler(c echo.Context) error {
+	_, todos := deleter("", "")
+	return c.JSONPretty(http.StatusOK, todos, "\t")
 }
 
 func routes(e *echo.Echo) {
@@ -51,6 +56,7 @@ func routes(e *echo.Echo) {
 	e.GET("/todo", getTodoHandler)
 	e.PATCH("/todo", patchTodoHandler)
 	e.DELETE("/todo", deleteTodoHandler)
+	e.DELETE("/todos", deleteAllTodosHandler)
 }
 
 func server() {

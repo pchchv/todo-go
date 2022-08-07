@@ -63,14 +63,16 @@ func patcher(id string, title string, text string, completed string) Todo {
 	return t
 }
 
-func deleter(id string, title string) Todo {
-	todo := Todo{}
+func deleter(id string, title string) (Todo, []Todo) {
+	var todos []Todo
+	var todo Todo
 	if id != "" {
 		// TODO: Implement task deleting by id
 	} else if title != "" {
 		// TODO: Implement task deleting by title
+	} else {
 	}
-	return todo
+	return todo, todos
 }
 
 func main() {
