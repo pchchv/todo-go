@@ -15,8 +15,9 @@ type Todo struct {
 }
 
 var (
-	envURL  string
-	testURL string
+	envURL         string
+	testURL        string
+	todoRepository = NewInMemoryTodoRepository()
 )
 
 func init() {
@@ -35,17 +36,17 @@ func getEnvValue(v string) string {
 	return value
 }
 
-func creator(title string, text string, completed string) Todo {
-	todo := Todo{}
+func creator(title string, text string, completed string) *Todo {
+	// Creates a new task and adds it to the repository
+	todo := new(Todo)
 	todo.Title = title
 	todo.Text = text
-	// TODO: Implement id generation and assignment
 	if completed == "true" {
 		todo.Completed = true
 	} else {
 		todo.Completed = false
 	}
-	// TODO: Implement addition of a task repository
+	todoRepository.Create(todo)
 	return todo
 }
 
