@@ -49,16 +49,21 @@ func creator(title string, text string, completed string) Todo {
 	return todo
 }
 
-func getter(id string, title string) Todo {
+func getter(id string, title string) (Todo, []Todo) {
+	var todos []Todo
 	todo := Todo{}
 	if id != "" {
+		// TODO: Implement a getting task by id
+	} else if title != "" {
+		// TODO: Implement a getting task by title
 	} else {
+		// TODO: Implement a getting all tasks
 	}
-	return todo
+	return todo, todos
 }
 
 func patcher(id string, title string, text string, completed string) Todo {
-	t := getter(id, title)
+	t, _ := getter(id, title)
 	// TODO: Implement a task updating
 	return t
 }
@@ -71,6 +76,7 @@ func deleter(id string, title string) (Todo, []Todo) {
 	} else if title != "" {
 		// TODO: Implement task deleting by title
 	} else {
+		// TODO: Implement deleting all tasks
 	}
 	return todo, todos
 }

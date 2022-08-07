@@ -24,7 +24,7 @@ func createTodoHandler(c echo.Context) error {
 func getTodoHandler(c echo.Context) error {
 	id := c.QueryParam("id")
 	title := c.QueryParam("title")
-	todo := getter(id, title)
+	todo, _ := getter(id, title)
 	return c.JSONPretty(http.StatusOK, todo, "\t")
 }
 
@@ -49,6 +49,11 @@ func deleteAllTodosHandler(c echo.Context) error {
 	return c.JSONPretty(http.StatusOK, todos, "\t")
 }
 
+func getAllTodosHandler(c echo.Context) error {
+	_, todos := getter("", "")
+	return c.JSONPretty(http.StatusOK, todos, "\t")
+}
+
 func routes(e *echo.Echo) {
 	e.GET("/", pingHandler)
 	e.GET("/ping", pingHandler)
@@ -56,6 +61,7 @@ func routes(e *echo.Echo) {
 	e.GET("/todo", getTodoHandler)
 	e.PATCH("/todo", patchTodoHandler)
 	e.DELETE("/todo", deleteTodoHandler)
+	e.GET("/todos", getAllTodosHandler)
 	e.DELETE("/todos", deleteAllTodosHandler)
 }
 
