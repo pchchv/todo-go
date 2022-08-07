@@ -50,6 +50,18 @@ func creator(title string, text string, completed string) MongoTodo {
 	return t
 }
 
+func getter(id string, title string) MongoTodo {
+	t := MongoTodo{}
+	// TODO: Implement retrieving a task from a database
+	return t
+}
+
+func patcher(id string, title string, text string, completed string) MongoTodo {
+	t := getter(id, title)
+	// TODO: Implement a task updating
+	return t
+}
+
 func main() {
 	envURL = getEnvValue("HOST") + ":" + getEnvValue("PORT")
 	db()

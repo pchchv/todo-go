@@ -21,6 +21,13 @@ func createTodoHandler(c echo.Context) error {
 	return c.JSONPretty(http.StatusOK, todo, "\t")
 }
 
+func getTodoHandler(c echo.Context) error {
+	id := c.QueryParam("id")
+	title := c.QueryParam("title")
+	todo := getter(id, title)
+	return c.JSONPretty(http.StatusOK, todo, "\t")
+}
+
 func patchTodoHandler(c echo.Context) error {
 	id := c.QueryParam("id")
 	title := c.QueryParam("title")
@@ -34,6 +41,7 @@ func routes(e *echo.Echo) {
 	e.GET("/", pingHandler)
 	e.GET("/ping", pingHandler)
 	e.POST("/todo", createTodoHandler)
+	e.GET("/todo", getTodoHandler)
 	e.PATCH("/todo", patchTodoHandler)
 }
 
