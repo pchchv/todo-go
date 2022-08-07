@@ -14,18 +14,15 @@ func pingHandler(c echo.Context) error {
 }
 
 func createTodoHandler(c echo.Context) error {
-	todo := Todo{}
-	todo.Title = c.QueryParam("title")
-	todo.Text = c.QueryParam("text")
-	if c.QueryParam("completed") == "true" {
-		todo.Completed = true
-	} else {
-		todo.Completed = false
-	}
-	return c.JSONPretty(http.StatusOK, creator(todo), "\t")
+	title := c.QueryParam("title")
+	text := c.QueryParam("text")
+	completed := c.QueryParam("completed")
+	todo := creator(title, text, completed)
+	return c.JSONPretty(http.StatusOK, todo, "\t")
 }
 
 func routes(e *echo.Echo) {
+	e.GET("/", pingHandler)
 	e.GET("/ping", pingHandler)
 	e.POST("/todo", createTodoHandler)
 }

@@ -23,14 +23,24 @@ func init() {
 }
 
 func getEnvValue(v string) string {
+	// Getting a value. Outputs a panic if the value is missing.
 	value, exist := os.LookupEnv(v)
 	if !exist {
 		log.Panicf("Value %v does not exist", v)
 	}
 	return value
 }
-func creator(todo Todo) MongoTodo {
+
+func creator(title string, text string, completed string) MongoTodo {
+	todo := Todo{}
 	t := MongoTodo{}
+	todo.Title = title
+	todo.Text = text
+	if completed == "true" {
+		todo.Completed = true
+	} else {
+		todo.Completed = false
+	}
 	t.Todo = todo
 	_, err := bson.Marshal(t)
 	if err != nil {
