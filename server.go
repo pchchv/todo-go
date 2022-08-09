@@ -48,8 +48,8 @@ func deleteTodoHandler(c echo.Context) error {
 }
 
 func deleteAllTodosHandler(c echo.Context) error {
-	_, todos := deleter("", "")
-	return c.JSONPretty(http.StatusOK, todos, "\t")
+	deleter("", "")
+	return c.NoContent(http.StatusNoContent)
 }
 
 func getAllTodosHandler(c echo.Context) error {
