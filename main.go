@@ -50,15 +50,15 @@ func creator(title string, text string, completed string) *Todo {
 	return todo
 }
 
-func getter(id string, title string) (Todo, []Todo) {
-	var todos []Todo
+func getter(id string, title string) (Todo, []*Todo) {
+	var todos []*Todo
 	todo := Todo{}
 	if id != "" {
 		// TODO: Implement a getting task by id
 	} else if title != "" {
 		// TODO: Implement a getting task by title
 	} else {
-		// TODO: Implement a getting all tasks
+		todos = todoRepository.GetAll()
 	}
 	return todo, todos
 }
