@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"os"
+	"errors"
+	"strconv"
 
 	"github.com/joho/godotenv"
 )
@@ -50,21 +52,27 @@ func creator(title string, text string, completed string) *Todo {
 	return todo
 }
 
-func getter(id string, title string) (Todo, []*Todo) {
+func getter(id string, title string) (*Todo, []*Todo, error) {
 	var todos []*Todo
-	todo := Todo{}
+	todo := new(Todo)
 	if id != "" {
-		// TODO: Implement a getting task by id
+		nid, err := strconv.Atoi(id)
+		if err != nil {
+			log.Panic(err)
+		}
+		if todo, err := todoRepository.Get(nid); err != nil {
+			return todo, todos, errors.New("Todo not found")
+		}
 	} else if title != "" {
 		// TODO: Implement a getting task by title
 	} else {
 		todos = todoRepository.GetAll()
 	}
-	return todo, todos
+	return todo, todos, nil
 }
 
-func patcher(id string, title string, text string, completed string) Todo {
-	t, _ := getter(id, title)
+func patcher(id string, title string, text string, completed string) *Todo {
+	t, _, _ := getter(id, title)
 	// TODO: Implement a task updating
 	return t
 }

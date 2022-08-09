@@ -24,7 +24,10 @@ func createTodoHandler(c echo.Context) error {
 func getTodoHandler(c echo.Context) error {
 	id := c.QueryParam("id")
 	title := c.QueryParam("title")
-	todo, _ := getter(id, title)
+	todo, _, err := getter(id, title)
+	if err != nil {
+		return c.String(http.StatusNotFound, "Todo not found")
+	}
 	return c.JSONPretty(http.StatusOK, todo, "\t")
 }
 
@@ -50,7 +53,7 @@ func deleteAllTodosHandler(c echo.Context) error {
 }
 
 func getAllTodosHandler(c echo.Context) error {
-	_, todos := getter("", "")
+	_, todos, _ := getter("", "")
 	return c.JSONPretty(http.StatusOK, todos, "\t")
 }
 
