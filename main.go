@@ -60,7 +60,8 @@ func getter(id string, title string) (*Todo, []*Todo, error) {
 		if err != nil {
 			log.Panic(err)
 		}
-		if todo, err := todoRepository.Get(nid); err != nil {
+		todo, err := todoRepository.Get(nid)
+		if err != nil {
 			return todo, todos, errors.New("Todo not found")
 		}
 	} else if title != "" {
@@ -77,16 +78,24 @@ func patcher(id string, title string, text string, completed string) *Todo {
 	return t
 }
 
-func deleter(id string, title string) {
+func deleter(id string, title string) error {
 	var todos []Todo
 	var todo Todo
 	if id != "" {
-		// TODO: Implement task deleting by id
+		nid, err := strconv.Atoi(id)
+		if err != nil {
+			log.Panic(err)
+		}
+		err := todoRepository.Delete(nid)
+		if err != nil {
+			return err
+		}
 	} else if title != "" {
 		// TODO: Implement task deleting by title
 	} else {
 		todoRepository.deleteAll()
 	}
+	return nil
 }
 
 func main() {
