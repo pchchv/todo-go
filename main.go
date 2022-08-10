@@ -108,7 +108,14 @@ func deleter(id string, title string) error {
 			return err
 		}
 	} else if title != "" {
-		// TODO: Implement task deleting by title
+		todo, _, err := getter("", title)
+		if err != nil {
+			return err
+		}
+		err = todoRepository.Delete(todo.Id)
+		if err != nil {
+			return err
+		}
 	} else {
 		todoRepository.DeleteAll()
 	}
