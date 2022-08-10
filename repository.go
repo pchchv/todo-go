@@ -5,7 +5,8 @@ import "errors"
 type TodoRepository interface {
 	Create(todo *Todo)
 	GetAll() []*Todo
-	Get(id int) (t *Todo, err error)
+	GetById(id int) (t *Todo, err error)
+	GetByTitle(title string) (t *Todo, err error)
 	Update(*Todo) (err error)
 	DeleteAll()
 	Delete(id int) (err error)
@@ -37,9 +38,18 @@ func (r *InMemoryTodoRepository) DeleteAll() {
 	r.Todos = make([]*Todo, 0)
 }
 
-func (r *InMemoryTodoRepository) Get(id int) (t *Todo, err error) {
+func (r *InMemoryTodoRepository) GetById(id int) (t *Todo, err error) {
 	for _, t = range r.Todos {
 		if t.Id == id {
+			return t, nil
+		}
+	}
+	return nil, errors.New("todo not found")
+}
+
+func (r *InMemoryTodoRepository) GetByTitle(title string) (t *Todo, err error) {
+	for _, t = range r.Todos {
+		if t.Title == title {
 			return t, nil
 		}
 	}

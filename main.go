@@ -61,7 +61,7 @@ func getter(id string, title string) (*Todo, []*Todo, error) {
 		if err != nil {
 			log.Panic(err)
 		}
-		todo, err := todoRepository.Get(nid)
+		todo, err := todoRepository.GetById(nid)
 		if err != nil {
 			return todo, todos, errors.New("Todo not found")
 		}
