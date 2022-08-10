@@ -62,8 +62,8 @@ func TestLoadPing(t *testing.T) {
 
 func TestServerCreate(t *testing.T) {
 	res, err := http.PostForm(testURL+"/todo?", url.Values{
-		"title": {"Buy coffee"},
-		"text":  {"Pack of 1 kilo"}})
+		"title": {"Buy%20coffee"},
+		"text":  {"Pack%20of%201%20kilo"}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -86,7 +86,7 @@ func TestLoadCreate(t *testing.T) {
 	duration := 5 * time.Second
 	targeter := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: "POST",
-		URL:    testURL + "/todo?title=Buy cigarettes",
+		URL:    testURL + "/todo?title=Buy%20cigarettes",
 	})
 	attacker := vegeta.NewAttacker()
 	var metrics vegeta.Metrics
@@ -98,11 +98,10 @@ func TestLoadCreate(t *testing.T) {
 }
 
 func TestServerGetOne(t *testing.T) {
-	res, err := http.Get(testURL + "/todo?title=Buy coffee")
+	res, err := http.Get(testURL + "/todo?title=Buy%20coffee")
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Log(res.StatusCode)
 	if res.StatusCode != http.StatusOK {
 		t.Errorf("status not OK")
 	}
@@ -122,7 +121,7 @@ func TestLoadGetOne(t *testing.T) {
 	duration := 5 * time.Second
 	targeter := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: "GET",
-		URL:    testURL + "/todo=1",
+		URL:    testURL + "/todo?id=1",
 	})
 	attacker := vegeta.NewAttacker()
 	var metrics vegeta.Metrics
