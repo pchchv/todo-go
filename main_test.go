@@ -82,11 +82,47 @@ func TestServerCreate(t *testing.T) {
 }
 
 func TestLoadCreate(t *testing.T) {
-	rate := vegeta.Rate{Freq: 999, Per: time.Second}
+	rate := vegeta.Rate{Freq: 1000, Per: time.Second}
 	duration := 5 * time.Second
 	targeter := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: "POST",
 		URL:    testURL + "/todo?title=Buy cigarettes",
+	})
+	attacker := vegeta.NewAttacker()
+	var metrics vegeta.Metrics
+	for res := range attacker.Attack(targeter, rate, duration, "Big Bang!") {
+		metrics.Add(res)
+	}
+	metrics.Close()
+	log.Printf("99th percentile: %s\n", metrics.Latencies.P99)
+}
+
+func TestServerGetOne(t *testing.T) {
+	res, err := http.Get(testURL + "/todo?title=Buy coffee")
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(res.StatusCode)
+	if res.StatusCode != http.StatusOK {
+		t.Errorf("status not OK")
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			t.Error(err)
+		}
+	}(res.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestLoadGetOne(t *testing.T) {
+	rate := vegeta.Rate{Freq: 1000, Per: time.Second}
+	duration := 5 * time.Second
+	targeter := vegeta.NewStaticTargeter(vegeta.Target{
+		Method: "GET",
+		URL:    testURL + "/todo=1",
 	})
 	attacker := vegeta.NewAttacker()
 	var metrics vegeta.Metrics
