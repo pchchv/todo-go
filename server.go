@@ -9,7 +9,7 @@ import (
 )
 
 func pingHandler(c echo.Context) error {
-	msg := "Todo backend Service. Version 0.1.0"
+	msg := "Todo backend Service. Version 0.2.0"
 	return c.String(http.StatusOK, msg)
 }
 

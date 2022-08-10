@@ -12,7 +12,7 @@ import (
 type Todo struct {
 	Id        int    `json:"id"`
 	Title     string `json:"title"`
-	Text      string `json:"textx"`
+	Text      string `json:"text"`
 	Completed bool   `json:"completed"`
 }
 
