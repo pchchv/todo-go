@@ -54,6 +54,7 @@ func creator(title string, text string, completed string) *Todo {
 
 func getter(id string, title string) (*Todo, []*Todo, error) {
 	// Gets the todo by id or title, or gets a list of all todos
+	var err error
 	var todos []*Todo
 	todo := new(Todo)
 	if id != "" {
@@ -61,12 +62,12 @@ func getter(id string, title string) (*Todo, []*Todo, error) {
 		if err != nil {
 			log.Panic(err)
 		}
-		todo, err := todoRepository.GetById(nid)
+		todo, err = todoRepository.GetById(nid)
 		if err != nil {
 			return todo, todos, errors.New("Todo not found")
 		}
 	} else if title != "" {
-		todo, err := todoRepository.GetByTitle(title)
+		todo, err = todoRepository.GetByTitle(title)
 		if err != nil {
 			return todo, todos, errors.New("Todo not found")
 		}
