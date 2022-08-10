@@ -43,11 +43,11 @@ func patchTodoHandler(c echo.Context) error {
 func deleteTodoHandler(c echo.Context) error {
 	id := c.QueryParam("id")
 	title := c.QueryParam("title")
-	err := deleter(id, title) 
+	err := deleter(id, title)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Todo not found")
 	}
-	return c.JSONPretty(http.StatusOK, todo, "\t")
+	return c.NoContent(http.StatusNoContent)
 }
 
 func deleteAllTodosHandler(c echo.Context) error {

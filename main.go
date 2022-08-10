@@ -1,9 +1,9 @@
 package main
 
 import (
+	"errors"
 	"log"
 	"os"
-	"errors"
 	"strconv"
 
 	"github.com/joho/godotenv"
@@ -79,21 +79,19 @@ func patcher(id string, title string, text string, completed string) *Todo {
 }
 
 func deleter(id string, title string) error {
-	var todos []Todo
-	var todo Todo
 	if id != "" {
 		nid, err := strconv.Atoi(id)
 		if err != nil {
 			log.Panic(err)
 		}
-		err := todoRepository.Delete(nid)
+		err = todoRepository.Delete(nid)
 		if err != nil {
 			return err
 		}
 	} else if title != "" {
 		// TODO: Implement task deleting by title
 	} else {
-		todoRepository.deleteAll()
+		todoRepository.DeleteAll()
 	}
 	return nil
 }
