@@ -73,11 +73,24 @@ func getter(id string, title string) (*Todo, []*Todo, error) {
 	return todo, todos, nil
 }
 
-func patcher(id string, title string, text string, completed string) *Todo {
+func updater(id string, title string, text string, completed string) (*Todo, error) {
 	// Changes the todo by finding it by id or title
-	t, _, _ := getter(id, title)
-	// TODO: Implement a task updating
-	return t
+	todo, _, err := getter(id, title)
+	if err != nil {
+		return todo, err
+	}
+	todo.Title = title
+	todo.Text = text
+	if completed == "true" {
+		todo.Completed = true
+	} else if completed == "false" {
+		todo.Completed = false
+	}
+	err = todoRepository.Update(todo)
+	if err != nil {
+		return todo, err
+	}
+	return todo, nil
 }
 
 func deleter(id string, title string) error {

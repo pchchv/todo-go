@@ -36,7 +36,10 @@ func patchTodoHandler(c echo.Context) error {
 	title := c.QueryParam("title")
 	text := c.QueryParam("text")
 	completed := c.QueryParam("completed")
-	todo := patcher(id, title, text, completed)
+	todo, err := updater(id, title, text, completed)
+	if err != nil {
+		return c.String(http.StatusNotFound, "Todo not found")
+	}
 	return c.JSONPretty(http.StatusOK, todo, "\t")
 }
 
