@@ -39,7 +39,7 @@ func getEnvValue(v string) string {
 }
 
 func creator(title string, text string, completed string) *Todo {
-	// Creates a new task and adds it to the repository
+	// Creates a new todo and adds it to the repository
 	todo := new(Todo)
 	todo.Title = title
 	todo.Text = text
@@ -53,6 +53,7 @@ func creator(title string, text string, completed string) *Todo {
 }
 
 func getter(id string, title string) (*Todo, []*Todo, error) {
+	// Gets the todo by id or title, or gets a list of all todos
 	var todos []*Todo
 	todo := new(Todo)
 	if id != "" {
@@ -73,12 +74,14 @@ func getter(id string, title string) (*Todo, []*Todo, error) {
 }
 
 func patcher(id string, title string, text string, completed string) *Todo {
+	// Changes the todo by finding it by id or title
 	t, _, _ := getter(id, title)
 	// TODO: Implement a task updating
 	return t
 }
 
 func deleter(id string, title string) error {
+	// Deletes the todo by id or title, or deletes all todos
 	if id != "" {
 		nid, err := strconv.Atoi(id)
 		if err != nil {
