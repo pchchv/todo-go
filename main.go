@@ -66,7 +66,10 @@ func getter(id string, title string) (*Todo, []*Todo, error) {
 			return todo, todos, errors.New("Todo not found")
 		}
 	} else if title != "" {
-		// TODO: Implement a getting task by title
+		todo, err := todoRepository.GetByTitle(title)
+		if err != nil {
+			return todo, todos, errors.New("Todo not found")
+		}
 	} else {
 		todos = todoRepository.GetAll()
 	}
