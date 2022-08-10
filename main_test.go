@@ -5,12 +5,11 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"net/url"
 	"strings"
 	"testing"
 	"time"
 
-	vegeta "github.com/tsenart/vegeta/v12/lib"
+	vegeta "github.com/tsenart/vegeta/lib"
 )
 
 func Test(t *testing.T) {
@@ -61,24 +60,7 @@ func TestLoadPing(t *testing.T) {
 }
 
 func TestServerCreate(t *testing.T) {
-	res, err := http.PostForm(testURL+"/todo?", url.Values{
-		"title": {"Buy%20coffee"},
-		"text":  {"Pack%20of%201%20kilo"}})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if res.StatusCode != http.StatusOK {
-		t.Errorf("status not OK")
-	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			t.Error(err)
-		}
-	}(res.Body)
-	if err != nil {
-		t.Fatal(err)
-	}
+	// TODO: POST request
 }
 
 func TestLoadCreate(t *testing.T) {
@@ -86,7 +68,7 @@ func TestLoadCreate(t *testing.T) {
 	duration := 5 * time.Second
 	targeter := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: "POST",
-		URL:    testURL + "/todo?title=Buy%20cigarettes",
+		URL:    testURL + "/todo?title=Buy%20coffee",
 	})
 	attacker := vegeta.NewAttacker()
 	var metrics vegeta.Metrics
@@ -122,6 +104,41 @@ func TestLoadGetOne(t *testing.T) {
 	targeter := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: "GET",
 		URL:    testURL + "/todo?id=1",
+	})
+	attacker := vegeta.NewAttacker()
+	var metrics vegeta.Metrics
+	for res := range attacker.Attack(targeter, rate, duration, "Big Bang!") {
+		metrics.Add(res)
+	}
+	metrics.Close()
+	log.Printf("99th percentile: %s\n", metrics.Latencies.P99)
+}
+
+func TestServerGetAll(t *testing.T) {
+	res, err := http.Get(testURL + "/todos")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.StatusCode != http.StatusOK {
+		t.Errorf("status not OK")
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			t.Error(err)
+		}
+	}(res.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestLoadGetAll(t *testing.T) {
+	rate := vegeta.Rate{Freq: 1000, Per: time.Second}
+	duration := 5 * time.Second
+	targeter := vegeta.NewStaticTargeter(vegeta.Target{
+		Method: "GET",
+		URL:    testURL + "/todos",
 	})
 	attacker := vegeta.NewAttacker()
 	var metrics vegeta.Metrics
