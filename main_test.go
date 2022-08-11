@@ -210,3 +210,26 @@ func TestLoadDeleteOne(t *testing.T) {
 	metrics.Close()
 	log.Printf("99th percentile: %s\n", metrics.Latencies.P99)
 }
+
+func TestServerDeleteAll(t *testing.T) {
+	req, err := http.NewRequest("DELETE", testURL+"/todos", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	res, err := testClient.Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.StatusCode != http.StatusNoContent {
+		t.Errorf("status not OK")
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			t.Error(err)
+		}
+	}(res.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
