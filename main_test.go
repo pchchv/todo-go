@@ -63,7 +63,7 @@ func TestLoadPing(t *testing.T) {
 
 func TestServerCreate(t *testing.T) {
 	body := []byte(`[{"title":  "Buy cinnabon"}]`)
-	req, err := http.NewRequest("POST", testURL+"/todo", bytes.NewBuffer(body))
+	req, err := http.NewRequest(http.MethodPost, testURL+"/todo", bytes.NewBuffer(body))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -171,9 +171,35 @@ func TestLoadGetAll(t *testing.T) {
 	log.Printf("99th percentile: %s\n", metrics.Latencies.P99)
 }
 
+func TestServerUpdate(t *testing.T) {
+	// TODO: Corrections are needed. Incorrect request
+	body := []byte(`[{"id":  "1"}, {"comleted": "true"}]`)
+	req, err := http.NewRequest(http.MethodPatch, testURL+"/todo?", bytes.NewBuffer(body))
+	if err != nil {
+		t.Fatal(err)
+	}
+	res, err := testClient.Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	log.Println(res)
+	if res.StatusCode != http.StatusOK {
+		t.Errorf("status not OK")
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			t.Error(err)
+		}
+	}(res.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestServerDeleteOne(t *testing.T) {
 	body := []byte(`[{"id":  "1"}]`)
-	req, err := http.NewRequest("DELETE", testURL+"/todo", bytes.NewBuffer(body))
+	req, err := http.NewRequest(http.MethodDelete, testURL+"/todo", bytes.NewBuffer(body))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -212,7 +238,7 @@ func TestLoadDeleteOne(t *testing.T) {
 }
 
 func TestServerDeleteAll(t *testing.T) {
-	req, err := http.NewRequest("DELETE", testURL+"/todos", nil)
+	req, err := http.NewRequest(http.MethodDelete, testURL+"/todos", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
