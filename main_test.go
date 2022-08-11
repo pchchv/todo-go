@@ -161,7 +161,18 @@ func TestServerDeleteOne(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Log(res.StatusCode)
+	if res.StatusCode != http.StatusNoContent {
+		t.Errorf("status not OK")
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			t.Error(err)
+		}
+	}(res.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestLoadDeleteOne(t *testing.T) {
