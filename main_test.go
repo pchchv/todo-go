@@ -62,7 +62,27 @@ func TestLoadPing(t *testing.T) {
 }
 
 func TestServerCreate(t *testing.T) {
-	// TODO: POST request
+	body := []byte(`[{"title":  "Buy cinnabon"}]`)
+	req, err := http.NewRequest("POST", testURL+"/todo", bytes.NewBuffer(body))
+	if err != nil {
+		t.Fatal(err)
+	}
+	res, err := testClient.Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.StatusCode != http.StatusOK {
+		t.Errorf("status not OK")
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			t.Error(err)
+		}
+	}(res.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestLoadCreate(t *testing.T) {
