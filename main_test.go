@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"io"
 	"io/ioutil"
 	"log"
@@ -14,6 +15,7 @@ import (
 
 func Test(t *testing.T) {
 	testURL = "http://" + getEnvValue("HOST") + ":" + getEnvValue("PORT")
+	testClient = http.Client{}
 }
 
 func TestServerPing(t *testing.T) {
@@ -147,4 +149,17 @@ func TestLoadGetAll(t *testing.T) {
 	}
 	metrics.Close()
 	log.Printf("99th percentile: %s\n", metrics.Latencies.P99)
+}
+
+func TestServerDeleteOne(t *testing.T) {
+	body := []byte(`[{"id":  "1"}]`)
+	req, err := http.NewRequest("DELETE", testURL+"/todo", bytes.NewBuffer(body))
+	if err != nil {
+		t.Fatal(err)
+	}
+	res, err := testClient.Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(res.StatusCode)
 }

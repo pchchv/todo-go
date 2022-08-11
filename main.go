@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 
@@ -20,6 +21,7 @@ var (
 	envURL         string
 	testURL        string
 	todoRepository = NewInMemoryTodoRepository()
+	testClient     http.Client
 )
 
 func init() {
