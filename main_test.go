@@ -163,3 +163,19 @@ func TestServerDeleteOne(t *testing.T) {
 	}
 	t.Log(res.StatusCode)
 }
+
+func TestLoadDeleteOne(t *testing.T) {
+	rate := vegeta.Rate{Freq: 1000, Per: time.Second}
+	duration := 5 * time.Second
+	targeter := vegeta.NewStaticTargeter(vegeta.Target{
+		Method: "DELETE",
+		URL:    testURL + "/todo?id=1",
+	})
+	attacker := vegeta.NewAttacker()
+	var metrics vegeta.Metrics
+	for res := range attacker.Attack(targeter, rate, duration, "Big Bang!") {
+		metrics.Add(res)
+	}
+	metrics.Close()
+	log.Printf("99th percentile: %s\n", metrics.Latencies.P99)
+}
