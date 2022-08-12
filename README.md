@@ -3,6 +3,10 @@
 ```
 go run .
 ```
+## Running tests (app must be running)
+```
+go test
+```
 ## HTTP Methods
 ```
 "GET" /ping — Checking the server connection
