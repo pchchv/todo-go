@@ -7,4 +7,4 @@ COPY . /app
 RUN go mod init main.go
 RUN go mod tidy
 
-EXPOSE 8000
+EXPOSE 8080
