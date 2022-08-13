@@ -18,7 +18,6 @@ type Todo struct {
 }
 
 var (
-	envURL         string
 	testURL        string
 	todoRepository = NewInMemoryTodoRepository()
 	testClient     http.Client
@@ -126,6 +125,5 @@ func deleter(id string, title string) error {
 }
 
 func main() {
-	envURL = getEnvValue("HOST") + ":" + getEnvValue("PORT")
 	server()
 }

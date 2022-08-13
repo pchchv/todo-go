@@ -78,5 +78,5 @@ func server() {
 	e := echo.New()
 	routes(e)
 	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(1000)))
-	log.Fatal(e.Start(envURL))
+	log.Fatal(e.Start(":" + getEnvValue("PORT")))
 }
